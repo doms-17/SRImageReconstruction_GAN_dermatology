@@ -1,0 +1,36 @@
+1) Ottenere info dataset:
+    - Per ogni label: sapere il numero img totali; numeri img per risoluzione
+    (Es: {AKIEC: [7649, [{1024x760: 6, 1024x1024: 100}],
+         BCC: [2000, [{1024x1024: 2000, 1600x1600: 230}],}
+2) Algoritmo selezione in base alla risoluzione:
+    - Ciclo per ogni label e salvo solamente img che rispettano la risoluzione scelta:
+        - [1024x1600 or 1600x1024 ---> Ok
+        - 1024x1024 ---> Ok
+        - 1600x1600 ---> Ok
+        - 850x850 ---> Ok]    =====>   H and W >= 1024
+        - 1024x720 or 720x1024 ---> ? (Potrei fare thresholding e croppare sulla lesione e poi riportarla a 1024x1024)
+        - 720x720 ---> No
+3) Algoritmi rimozione artefatti:
+    - Risoluzione "Dark Corner"
+    - Immagini rettangolari: sliding window con 3 img finali se differenza altezza-lunghezza elevata
+
+4) Visualizzare Dataset ottenuto, eliminare img brutte
+
+5)  Fare Data Augmentation: usare Albumentation (proviamo ad arrivare al doppio di immagini)
+    vedere sempre cosa combina tramite grafici
+
+6)  - Creare dataset "High Res": 
+    - Creare dataset "Low Res": prima fare diverse prove con diverse degradazioni e poi scegliere quella più opportuna (4 prove: 1° ordine, 1+2°ordine, x4 Scale, x8 Scale)
+    Tip: per scegliere lowres_best usare grafici multipli a griglia e metriche
+    NB: inserire filtro mediano nelle immagini highres post sharpen e vedere se è il caso di usarlo o meno
+
+    creare 2 versioni finali di dataset:
+    1: high_res (no sharp), low_res (best)
+    2: highres (sharp), low_res (best)
+
+
+
+------- new
+
+Rifare tutto usando sliding window: Oritignal_or -----> noArtifact_sliding ----> paired_sliding
+    Grafici low_x4 | low_x8 | high | high+ con vari esempi
