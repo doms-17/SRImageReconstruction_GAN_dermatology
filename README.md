@@ -1,2 +1,2 @@
 # thesis
-domi_thesis repo
+thesis project
