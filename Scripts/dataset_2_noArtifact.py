@@ -83,7 +83,7 @@ def sliding_resize(image, height, width, dimToRes):
     else:
         width_resized = dimToRes
         height_resized = int(height*(width_resized/width))
-    ratio_new = max(height_resized,width_resized)/min(height_resized,width_resized)
+    # ratio_new = max(height_resized,width_resized)/min(height_resized,width_resized)
     # if not (ratio_or-3 <ratio_new< ratio_or+3):
     #     return None
     resized_image = cv2.resize(image, (width_resized,height_resized), interpolation=cv2.INTER_AREA)
