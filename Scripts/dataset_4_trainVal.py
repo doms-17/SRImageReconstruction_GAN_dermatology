@@ -1,49 +1,78 @@
 import os
+import random
 import json
 import shutil
 from tqdm import tqdm
 
+TRAIN: float = 0.7
+VAL: float = 0.1
+TEST: float = 0.2
 
-def create_folder(path, sub_dir, folder_name):
+
+def create_folder(path, sub_dir="", folder_name=""):
     path = os.getcwd()
+    # dir_name = pathlib.Path('/my/directory').mkdir(parents=True, exist_ok=True)
     dir_name = os.path.join(path, sub_dir, folder_name)
     os.makedirs(dir_name, exist_ok=True)
     return dir_name
 
 
-class ValidSet:
-    def __init__(self, path, path_json, filename_json):
-        self.path = path
-        self.path_json = path_json
-        self.filename_json = filename_json
+def create_setFolders(main_path):
+    root_trainSet_low = create_folder(
+        path=f"{main_path}\\lowResolution\\train")
+    root_valSet_low = create_folder(
+        path=f"{main_path}\\lowResolution\\val")
+    root_testSet_low = create_folder(
+        path=f"{main_path}\\lowResolution\\test")
 
-        json_to_dict = json.load(open(os.path.join(self.path_json, self.filename_json)))
-        self.files_deleted_per_label = json_to_dict["files_per_label"]
-        self.labels = self.files_deleted_per_label.keys()
+    root_trainSet_high_plus = create_folder(
+        path=f"{main_path}\\highResolution_plus\\train")
+    root_valSet_high_plus = create_folder(
+        path=f"{main_path}\\highResolution_plus\\val")
+    root_testSet_high_plus = create_folder(
+        path=f"{main_path}\\highResolution_plus\\test")
+    return root_trainSet_low
 
-    def split(self, valFolder):
-        for label in self.labels:
-            root_and_dir_noArtifact_or = os.path.join(self.path, label)
-            new_root_and_dir = create_folder(path="", sub_dir="validSet_per_label", folder_name=label)
-            files = os.listdir(root_and_dir_noArtifact_or)
-            for file in tqdm(files):
-                if file in self.files_deleted_per_label[label]:
-                    shutil.copyfile(os.path.join(root_and_dir_noArtifact_or,file), os.path.join(new_root_and_dir,file))
-                    
 
-def test():
-    dataset_name = "dataset_noArtifact_or"
-    root_or = f"{os.getcwd()}\\{dataset_name}"
+def val_set(root_allFiles):
+    all_files_name = os.listdir(root_allFiles)
+    val_files_name = random.sample(
+        all_files_name, int(len(all_files_name)*VAL))
+    val_files_name_json = 'val_files_name.json'
+    json.dump(val_files_name, open(val_files_name_json, 'w'), indent=3)
 
-    path_json = os.getcwd()
-    filename_json = 'files_deleted_per_label.json'
 
-    newDataset_name = "validSet_per_label"
-    validSet_folder = create_folder(path="", sub_dir=newDataset_name, folder_name="")
+def test_set(root_allFiles):
+    all_files_name = os.listdir(root_allFiles)
+    test_files_name = random.sample(
+        all_files_name, int(len(all_files_name)*TEST))
+    test_files_name_json = 'test_files_name.json'
+    json.dump(test_files_name, open(test_files_name_json, 'w'), indent=3)
 
-    validSet = ValidSet(path=root_or, path_json=path_json, filename_json=filename_json)
-    validSet.split(validSet_folder)
+
+def train_set(root_allFiles):
+    train_files_name = os.listdir(root_allFiles)
+    train_files_name_json = 'train_files_name.json'
+    json.dump(train_files_name, open(train_files_name_json, 'w'), indent=3)
+
+
+def move_files(orig_folder, dest_folder, jsonfile):
+    jsonToList = json.load(open(jsonfile))
+
+    for file in tqdm(jsonToList):
+        # shutil.move(os.path.join(root_train_set_low, file), os.path.join(root_val_set_low, file),)
+        shutil.move(os.path.join(orig_folder, file),
+                    os.path.join(dest_folder, file),)
 
 
 if __name__ == "__main__":
-    test()
+    # path = "D:\\DOMI\\University\\Magistrale\\Tesi\\Pipeline_coding\\dataset_paired_sliding_resized_new"
+    # root_trainSet_low = create_setFolders(path)
+
+    root_all_files = "D:\\DOMI\\University\\Magistrale\\Tesi\\Pipeline_coding\\dataset_paired_sliding_new\\highResolution\\train"
+    # dest_files = "D:\\DOMI\\University\\Magistrale\\Tesi\\Pipeline_coding\\dataset_paired_sliding_new\\highResolution\\test"
+    # filejson = "D:\\DOMI\\University\\Magistrale\\Tesi\\Pipeline_coding\\test_files_name.json"
+    # move_files(root_all_files, dest_files, filejson)
+    train_set(root_all_files)
+    # test_set(root_all_files)
+    # val_set(root_all_files)

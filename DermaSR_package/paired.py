@@ -10,8 +10,23 @@ class Paired:
         self.height = self.image.shape[0]
         self.width = self.image.shape[1]
 
+    def __repr__(self) -> str:
+        return "<class 'Paired'>" 
+
+    def __str__(self) -> str:
+        return f"Image: {self.image}, Height: {self.height}, Width: {self.width}"
+
 
     def degradation_1order(self, scale):
+        """Removing hair from skin images
+            Params:
+            -- stepSize:                indicates how many pixels we are going to “skip” in both the (x, y) direction
+            -- windowSize (winW, winH): defines the width and height (in terms of pixels) of the window we are going to extract
+
+            Returns:
+            -- The sliced image
+
+        """
         lowres = A.Compose([
             ########## 1ST ORDER ##########
             # -----Blur
@@ -45,6 +60,15 @@ class Paired:
         
 
     def degradation_norder(self, scale):
+        """Removing hair from skin images
+            Params:
+            -- stepSize:                indicates how many pixels we are going to “skip” in both the (x, y) direction
+            -- windowSize (winW, winH): defines the width and height (in terms of pixels) of the window we are going to extract
+
+            Returns:
+            -- The sliced image
+
+        """
         lowres = A.Compose([        
             ########## N ORDER ##########
             # -----Blur
@@ -89,6 +113,15 @@ class Paired:
 
 
     def sharpness(self):
+        """Removing hair from skin images
+            Params:
+            -- stepSize:                indicates how many pixels we are going to “skip” in both the (x, y) direction
+            -- windowSize (winW, winH): defines the width and height (in terms of pixels) of the window we are going to extract
+
+            Returns:
+            -- The sliced image
+
+        """
         highres_plus = A.Compose([
             A.Sharpen(alpha=(0.5, 0.5), lightness=(1, 1), p=1),
             A.MedianBlur(blur_limit=(3, 3), p=0.5),

@@ -11,7 +11,23 @@ class Augmentation:
         self.height = self.image.shape[0]
         self.width = self.image.shape[1]
 
+    def __repr__(self) -> str:
+        return "<class 'Augmentation'>" 
+
+    def __str__(self) -> str:
+        return f"Image: {self.image}, Height: {self.height}, Width: {self.width}"
+        
+
     def augment(self, p_spatial_transf=0, p_crop_resize=0, dim_crop=0):
+        """Removing hair from skin images
+            Params:
+            -- stepSize:                indicates how many pixels we are going to “skip” in both the (x, y) direction
+            -- windowSize (winW, winH): defines the width and height (in terms of pixels) of the window we are going to extract
+
+            Returns:
+            -- The sliced image
+
+        """
         transform = A.Compose([
             A.Affine(scale=(1.05), keep_ratio=True,
                      shear=[-5,5], interpolation=cv2.INTER_CUBIC, mode=cv2.BORDER_CONSTANT, p=0.5),

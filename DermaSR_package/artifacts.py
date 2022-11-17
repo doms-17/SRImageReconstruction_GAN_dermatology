@@ -12,9 +12,23 @@ class Artifacts:
         self.height = self.image.shape[0]
         self.width = self.image.shape[1]
 
+    def __repr__(self) -> str:
+        return "<class 'Artifacts'>" 
+
+    def __str__(self) -> str:
+        return f"Image: {self.image}, Height: {self.height}, Width: {self.width}"
+
     
     def center_cropping(self, dim_h, dim_w):
-        """Crop image of selected height and width starting from center"""
+        """Crop image of selected height and width starting from center
+        
+            Params:
+            -- threshold_image:                indicates how many pixels we are going to “skip” in both the (x, y) direction
+
+            Returns:
+            -- 
+                    
+        """
         center = self.height/2, self.width/2
         x = center[1] - dim_w/2
         y = center[0] - dim_h/2
@@ -23,7 +37,15 @@ class Artifacts:
 
 
     def thresholding(self, denoise_kernel, areaClose_kernel):
-        """Applying Denoising+Thresholding and doing Area Closing"""
+        """Applying Denoising+Thresholding and doing Area Closing
+        
+            Params:
+            -- threshold_image:                indicates how many pixels we are going to “skip” in both the (x, y) direction
+
+            Returns:
+            -- 
+            
+        """
         gray = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
         blur = cv2.GaussianBlur(gray, (denoise_kernel, denoise_kernel), 0)
         _, th = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
@@ -33,7 +55,15 @@ class Artifacts:
 
 
     def cropping_to_max_cont(self, threshold_image):
-        """Cropping to the maximum contour found"""
+        """Cropping to the maximum contour found
+
+            Params:
+            -- threshold_image:                indicates how many pixels we are going to “skip” in both the (x, y) direction
+
+            Returns:
+            -- 
+            
+        """
         contours, _ = cv2.findContours(
             threshold_image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         if len(contours) == 0:
@@ -50,7 +80,6 @@ class Artifacts:
         """Slide a window across the image and yield it
 
             Params:
-            -- image:                   image input
             -- stepSize:                indicates how many pixels we are going to “skip” in both the (x, y) direction
             -- windowSize (winW, winH): defines the width and height (in terms of pixels) of the window we are going to extract
 
@@ -64,6 +93,16 @@ class Artifacts:
 
 
     def sliding_resize(self, height, width, dimToRes):
+        """Slide a window across the image and yield it
+
+            Params:
+            -- stepSize:                indicates how many pixels we are going to “skip” in both the (x, y) direction
+            -- windowSize (winW, winH): defines the width and height (in terms of pixels) of the window we are going to extract
+
+            Returns:
+            -- The sliced image
+
+            """
         ratio_or = max(height, width)/min(height, width)
         if height < width:
             height_resized = dimToRes
@@ -83,7 +122,15 @@ class Artifacts:
 
 
     def hair_removal(self):
-        """Removing hair from skin images"""
+        """Removing hair from skin images
+            Params:
+            -- stepSize:                indicates how many pixels we are going to “skip” in both the (x, y) direction
+            -- windowSize (winW, winH): defines the width and height (in terms of pixels) of the window we are going to extract
+
+            Returns:
+            -- The sliced image
+                    
+        """
         gray = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
         gray = cv2.GaussianBlur(gray, (5, 5), 0)
         # Perform the blackHat filtering on the grayscale image to find the hair countours
