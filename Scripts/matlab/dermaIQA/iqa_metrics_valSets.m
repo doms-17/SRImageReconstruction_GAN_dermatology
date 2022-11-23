@@ -11,15 +11,31 @@ addpath('Ma_score/external/matlabPyrTools','Ma_score/external/randomforest-matla
 gt_root = "D:/DOMI/University/Thesis/Coding/Visualization/derma_v1/lowResolution_512_try/";
 sr_root = "D:/DOMI/University/Thesis/Coding/Visualization/derma_v1/visualization_reOrdered/";
 
+testSet = "Validation/";
+
 cont_notTestSet = 0;
 subfolders = dir(sr_root);
-for idx_subfolder = 1 : length(subfolders)
-    iteration = subfolders(idx_subfolder).name;
-    
-    if iteration(1) ~= '.'
-        path = fullfile(subfolders(idx_subfolder).folder, iteration);
+
+num_iterations = 4;   % number of iterations to process
+step_iterations = floor(length(subfolders)/num_iterations);
+
+iterations = [];
+for m = 1 : step_iterations : length(subfolders)
+    iteration = subfolders(m).name;
+    if ( iteration(1) ~= '.' )
+        iterations = [iterations; str2double(iteration)];
+    end
+end
+iterations = sort(iterations,"ascend");
+
+stats_metrics = table();
+parfor idx_subfolder = 1 : length(iterations)
+    iteration = iterations(idx_subfolder);
+    if ( iteration(1) ~= '.' )
+        path = fullfile(subfolders(idx_subfolder).folder, num2str(iteration));
         images_filename = dir(path);
-        fprintf(1, '\nIteration %s', iteration);
+        fprintf(1, "\n================");
+        fprintf(1, '\nIteration %d', iteration);
 
         %----- Inizialization -----%
         % Full-Reference Metrics
@@ -80,7 +96,11 @@ for idx_subfolder = 1 : length(subfolders)
 
                 array_psnr(idx_image-cont_notFilename) = psnr(rgb2ycbcr(sr_image), rgb2ycbcr(gt_image));
                 array_ssim(idx_image-cont_notFilename) = ssim(sr_image, gt_image);
-                array_mssim(idx_image-cont_notFilename) = mean(multissim(sr_image, gt_image));
+%                 array_mssim(idx_image-cont_notFilename) = mean(multissim(sr_image, gt_image));
+                tmp_ch1 = multissim(sr_image(:,:,1), gt_image(:,:,1));
+                tmp_ch2 = multissim(sr_image(:,:,2), gt_image(:,:,2));
+                tmp_ch3 = multissim(sr_image(:,:,3), gt_image(:,:,3));
+                array_mssim(idx_image-cont_notFilename) = (tmp_ch1+tmp_ch2+tmp_ch1)/3;
                 array_fsim(idx_image-cont_notFilename) = fsim(sr_image, gt_image);
 
                 fprintf(1, 'Finished!\n');
@@ -103,100 +123,13 @@ for idx_subfolder = 1 : length(subfolders)
         array_piqe_sr = array_piqe_sr(array_piqe_sr~=0);
         array_brisque_sr = array_brisque_sr(array_brisque_sr~=0);
         
-        % FR-metrics
-        stats_metricsFR = ["metrics","mean","std","per_5%","perc_95%"; ... 
-        "psnr",mean(array_psnr), std(array_psnr), prctile(array_psnr, 5), prctile(array_psnr, 95); ...
-        "ssim",mean(array_ssim), std(array_ssim), prctile(array_ssim, 5), prctile(array_ssim, 95); ...
-        "mssim",mean(array_mssim), std(array_mssim), prctile(array_mssim, 5), prctile(array_mssim, 95); ...
-        "fsim",mean(array_fsim), std(array_fsim), prctile(array_fsim, 5), prctile(array_fsim, 95)];
-        stats_metricsFR = array2table(stats_metricsFR);
-
-        stats_metricsNR_gt = ["metrics","mean","std","per_5%","perc_95%"; ... 
-        "niqe",mean(array_niqe_gt), std(array_niqe_gt), prctile(array_niqe_gt, 5), prctile(array_niqe_gt, 95); ...
-        "piqe",mean(array_piqe_gt), std(array_piqe_gt), prctile(array_piqe_gt, 5), prctile(array_piqe_gt, 95); ...
-        "brisque",mean(array_brisque_gt), std(array_brisque_gt), prctile(array_brisque_gt, 5), prctile(array_brisque_gt, 95); ...
-        "empty", 0, 0, 0, 0];
-        stats_metricsNR_gt = array2table(stats_metricsNR_gt);
-
-        stats_metricsNR_sr = ["metrics","mean","std","per_5%","perc_95%"; ... 
-        "niqe",mean(array_niqe_sr), std(array_niqe_sr), prctile(array_niqe_sr, 5), prctile(array_niqe_sr, 95); ...
-        "piqe",mean(array_piqe_sr), std(array_piqe_sr), prctile(array_piqe_sr, 5), prctile(array_piqe_sr, 95); ...
-        "brisque",mean(array_brisque_sr), std(array_brisque_sr), prctile(array_brisque_sr, 5), prctile(array_brisque_sr, 95); ...
-        "empty", 0, 0, 0, 0];
-        stats_metricsNR_sr = array2table(stats_metricsNR_sr);
-
-        stats_metrics = [stats_metricsFR, stats_metricsNR_gt, stats_metricsNR_sr];
-
-%         stats_metricsFR_psnr.psnr.array = array_psnr;
-%         stats_metricsFR_psnr.psnr.mean =  mean(array_psnr);
-%         stats_metricsFR_psnr.psnr.std = std(array_psnr);
-%         stats_metricsFR_psnr.psnr.inf = prctile(array_psnr, 5);
-%         stats_metricsFR_psnr.psnr.sup = prctile(array_psnr, 95);
-% 
-%         stats_metricsFR_psnr.ssim.array = array_ssim;
-%         stats_metricsFR_psnr.ssim.mean =  mean(array_ssim);
-%         stats_metricsFR_psnr.ssim.std= std(array_ssim);
-%         stats_metricsFR_psnr.ssim.inf = prctile(array_ssim, 5);
-%         stats_metricsFR_psnr.ssim.sup = prctile(array_ssim, 95);
-% 
-%         stats_metricsFR_psnr.mssim.array = array_mssim;
-%         stats_metricsFR_psnr.mssim.mean =  mean(array_mssim);
-%         stats_metricsFR_psnr.mssim.std= std(array_mssim);
-%         stats_metricsFR_psnr.mssim.inf = prctile(array_mssim, 5);
-%         stats_metricsFR_psnr.mssim.sup = prctile(array_mssim, 95);
-% 
-%         stats_metricsFR_psnr.fsim.array = array_fsim;
-%         stats_metricsFR_psnr.fsim.mean =  mean(array_fsim);
-%         stats_metricsFR_psnr.fsim.std= std(array_fsim);
-%         stats_metricsFR_psnr.fsim.inf = prctile(array_fsim, 5);
-%         stats_metricsFR_psnr.fsim.sup = prctile(array_fsim, 95);
-%         
-%         % NR-metrics GT
-%         stats_metricsNR_gt.niqe.array = array_niqe_gt;
-%         stats_metricsNR_gt.niqe.mean =  mean(array_niqe_gt);
-%         stats_metricsNR_gt.niqe.std= std(array_niqe_gt);
-%         stats_metricsNR_gt.niqe.inf = prctile(array_niqe_gt, 5);
-%         stats_metricsNR_gt.niqe.sup = prctile(array_niqe_gt, 95);
-% 
-%         stats_metricsNR_gt.piqe.array = array_piqe_gt;
-%         stats_metricsNR_gt.piqe.mean =  mean(array_piqe_gt);
-%         stats_metricsNR_gt.piqe.std= std(array_piqe_gt);
-%         stats_metricsNR_gt.piqe.inf = prctile(array_piqe_gt, 5);
-%         stats_metricsNR_gt.piqe.sup = prctile(array_piqe_gt, 95);
-% 
-%         stats_metricsNR_gt.brisque.array = array_brisque_gt;
-%         stats_metricsNR_gt.brisque.mean =  mean(array_brisque_gt);
-%         stats_metricsNR_gt.brisque.std= std(array_brisque_gt);
-%         stats_metricsNR_gt.brisque.inf = prctile(array_brisque_gt, 5);
-%         stats_metricsNR_gt.brisque.sup = prctile(array_brisque_gt, 95);
-%         
-%         % NR-metrics SR
-%         stats_metricsNR_sr.niqe.array = array_niqe_sr;
-%         stats_metricsNR_sr.niqe.mean =  mean(array_niqe_sr);
-%         stats_metricsNR_sr.niqe.std= std(array_niqe_sr);
-%         stats_metricsNR_sr.niqe.inf = prctile(array_niqe_sr, 5);
-%         stats_metricsNR_sr.niqe.sup = prctile(array_niqe_sr, 95);
-% 
-%         stats_metricsNR_sr.piqe.array = array_piqe_sr;
-%         stats_metricsNR_sr.piqe.mean =  mean(array_piqe_sr);
-%         stats_metricsNR_sr.piqe.std= std(array_piqe_sr);
-%         stats_metricsNR_sr.piqe.inf = prctile(array_piqe_sr, 5);
-%         stats_metricsNR_sr.piqe.sup = prctile(array_piqe_sr, 95);
-% 
-%         stats_metricsNR_sr.brisque.array = array_brisque_sr;
-%         stats_metricsNR_sr.brisque.mean =  mean(array_brisque_sr);
-%         stats_metricsNR_sr.brisque.std= std(array_brisque_sr);
-%         stats_metricsNR_sr.brisque.inf = prctile(array_brisque_sr, 5);
-%         stats_metricsNR_sr.brisque.sup = prctile(array_brisque_sr, 95);
-
-        %% ========== Save files ==========%
-
-%         %----- All metrics: -----%
-%         root_metrics = "D:/DOMI/University/Thesis/Results_resume/excel_metrics/";
-%         path_metrics = root_metrics + iteration;
-%         stats_metrics_xlsx =  path_metrics+"/stats_metrics.xlsx";
-%         writetable(stats_metrics, stats_metrics_xlsx);
-
+        % Metrics
+        stats_metrics_tmp = table( iteration, mean(array_psnr), mean(array_ssim), mean(array_mssim), mean(array_fsim),...
+        mean(array_niqe_gt), mean(array_niqe_sr), mean(array_piqe_gt), mean(array_piqe_sr),...
+        mean(array_brisque_gt), mean(array_brisque_sr) );
+        stats_metrics_tmp.Properties.VariableNames = ["iter","psnr","ssim","mssim","fsim","niqe_gt","niqe_sr","piqe_gt","piqe_sr","brisque_gt","brisque_sr"];
+        
+        stats_metrics = [stats_metrics_tmp; stats_metrics];
     else
         cont_notTestSet = cont_notTestSet+1;
     end
@@ -204,5 +137,36 @@ end
 
 timeElapsed = toc/60 %min          
 
+
+%% ========== Save files ==========%
+
+%----- All metrics: -----%
+root_metrics = "D:/DOMI/University/Thesis/Results_resume/excel_metrics/";
+path_metrics = (root_metrics + testSet);
+mkdir(path_metrics);
+
+% Best Iteration:
+NRorder_stats_metrics = sortrows(stats_metrics, ["niqe_sr","piqe_sr"], "ascend");
+FRorder_stats_metrics = sortrows(stats_metrics, ["ssim","psnr"], "descend");
+
+row_limit = 3; %thresh where to search for best iteration
+
+for w = 1 : size(FRorder_stats_metrics,1)
+    if any(table2array(FRorder_stats_metrics(w,1)) == table2array(NRorder_stats_metrics(1:row_limit,1)))
+        best_iteration_table = FRorder_stats_metrics(w,:);
+        break
+    end
+end
+
+if ( abs(best_iteration_table.("ssim")-table2array(NRorder_stats_metrics(1,"ssim"))) ...
+       <= abs(best_iteration_table.("niqe_sr")-table2array(NRorder_stats_metrics(1,"niqe_sr"))) )
+    best_iteration_table = NRorder_stats_metrics(1,:);
+end
+
+best_iteration = best_iteration_table.("iter");
+fprintf(1, "\nBest Iteration NR: %d", best_iteration);
+
+stats_metrics_xlsx =  path_metrics+"/stats_metrics.xlsx";
+writetable([NRorder_stats_metrics; best_iteration_table], stats_metrics_xlsx);
 
 

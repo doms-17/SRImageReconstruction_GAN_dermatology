@@ -13,14 +13,14 @@ sr_root = "D:/DOMI/University/Thesis/Coding/Dataset/Inference/TestSet/";
 
 cont_notTestSet = 0;
 subfolders = dir(gt_root);
-for idx_subfolder = 1 : length(subfolders)
+for idx_subfolder = length(subfolders)-1 : length(subfolders)
     testSet = subfolders(idx_subfolder).name;
     
     if testSet(1) ~= '.'
         path = fullfile(subfolders(idx_subfolder).folder, testSet);
         images_filename = dir(path);
-        fprintf(1, "\n================");
-        fprintf(1, '\nTestSet %s', testSet);
+        fprintf(1, "\n================")
+        fprintf(1, '\nTestSet %s', testSet)
 
         %----- Inizialization -----%
         % Full-Reference Metrics

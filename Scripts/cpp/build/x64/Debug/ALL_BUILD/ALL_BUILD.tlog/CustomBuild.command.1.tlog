@@ -1,0 +1,10 @@
+^D:\DOMI\UNIVERSITY\THESIS\CODING\SCRIPTS\CPP\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/DOMI/University/Thesis/Coding/Scripts/cpp -BD:/DOMI/University/Thesis/Coding/Scripts/cpp/build --check-stamp-file D:/DOMI/University/Thesis/Coding/Scripts/cpp/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
