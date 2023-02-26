@@ -1,9 +1,0 @@
-D:/DOMI/University/Thesis/Coding/Scripts/cpp/build/CMakeFiles/Experimental.dir
-D:/DOMI/University/Thesis/Coding/Scripts/cpp/build/CMakeFiles/Nightly.dir
-D:/DOMI/University/Thesis/Coding/Scripts/cpp/build/CMakeFiles/Continuous.dir
-D:/DOMI/University/Thesis/Coding/Scripts/cpp/build/CMakeFiles/NightlyMemoryCheck.dir
-D:/DOMI/University/Thesis/Coding/Scripts/cpp/build/CMakeFiles/artifacts.dir
-D:/DOMI/University/Thesis/Coding/Scripts/cpp/build/CMakeFiles/PACKAGE.dir
-D:/DOMI/University/Thesis/Coding/Scripts/cpp/build/CMakeFiles/RUN_TESTS.dir
-D:/DOMI/University/Thesis/Coding/Scripts/cpp/build/CMakeFiles/ALL_BUILD.dir
-D:/DOMI/University/Thesis/Coding/Scripts/cpp/build/CMakeFiles/ZERO_CHECK.dir

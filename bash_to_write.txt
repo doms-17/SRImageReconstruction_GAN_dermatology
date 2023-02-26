@@ -1,5 +1,0 @@
-training: 
-python train.py --label_nc 0 --no_instance --resize_or_crop none --name derma --dataroot ./datasets/derma --save_epoch_freq 5 --batchSize 8 
-
-test:
-python test.py --label_nc 0 --no_instance --resize_or_crop none --name derma_test --dataroot ./datasets/derma/test

@@ -1,5 +1,0 @@
-Original_orsize: dataset di partenza
-noArtifact_or: dataset senza artefatti
-noArtifact: dataset senza artefatti + immagini eliminate a mano
-dataset_paired: dataset finale con img normali
-dataset_paired_aug: dataset finale con img augmented

@@ -1,6 +1,0 @@
-training:
-# !./scripts/train_512p.sh
-!python train.py --name derma --norm 'instance' --batchSize 1 --label_nc 0  --dataroot ./datasets/derma/ --resize_or_crop none --no_flip --no_instance --save_epoch_freq 5 --n_blocks_global 6 --n_blocks_local 2 --num_D 1
-
-test:
-python test.py --label_nc 0 --no_instance --resize_or_crop none --name derma_test --dataroot ./datasets/derma/test                

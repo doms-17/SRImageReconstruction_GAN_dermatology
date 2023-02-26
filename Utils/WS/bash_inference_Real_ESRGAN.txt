@@ -1,1 +1,0 @@
-python inference_realesrgan_derma.py -n dermaRealESRGAN_x2plus -i D:/DOMI/University/Thesis/Inference/test_images -o D:/DOMI/University/Thesis/Inference/results --outscale 1 --suffix sr
