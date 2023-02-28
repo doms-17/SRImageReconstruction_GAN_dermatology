@@ -2,8 +2,6 @@ clc
 clear variables
 close all
 
-addpath('Branciforti Scripts\')
-
 % main path
 path = "D:\DOMI\University\Thesis\Presentation_Thesis\Images_graphs_tables\Materials and methods";
 folder = "\data_analysis\";     % subfolder

@@ -7,7 +7,7 @@ from dermasr.artifacts import Artifacts
 from tqdm import tqdm
 
 
-
+### Set some constant variable to be used in the Preprocessing pipeline ###
 HIGH_RES: int = 512      # dimension of images to select and process (Put to zero to process images of every dimension)
 BORDER_THICK: int = 10       # thickness to check on borders when checking for Dark Corner
 DARK_THRESH: int = 10    # threshold to classify a border as near-black or not
@@ -41,6 +41,7 @@ def test():
 
             try:
                 ### Check for Dark Corner Artifact ###
+                # Calculate the mean intensity of each border of the mask
                 sx_border = np.mean(mask[:, 0:BORDER_THICK])
                 dx_border = np.mean(mask[:, -BORDER_THICK:])
                 up_border = np.mean(mask[0:BORDER_THICK, :])

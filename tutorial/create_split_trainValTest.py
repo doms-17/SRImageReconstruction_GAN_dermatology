@@ -7,10 +7,10 @@ import sklearn
 from tqdm import tqdm
 
 
-
-TRAIN: float = 0.75
+## Set the percentage to determine the proportion of data that should be allocated to the Training, Validation and Test Set.
+TRAIN: float = 0.80     
 VAL: float = 0.10
-TEST: float = 0.15
+TEST: float = 0.10
 
 
 
