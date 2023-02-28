@@ -30,6 +30,9 @@ It contains the Artifacts functions implemented in C++.
 ## tutorial:
 It contains a set of guides and tutorials on how to use the 'dermasr' package and replicate the most important parts of the pipeline.
 
+## real_esrgan:
+It contains a guide and useful scripts and file to properly train the GAN model and inference using the trained weights to restore images quality.
+
 ## texture analysis:
 It contains codes to run the 'Texture Analysis'.
 
