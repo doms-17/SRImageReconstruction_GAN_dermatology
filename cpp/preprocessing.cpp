@@ -2,8 +2,8 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
 
-using namespace std;
-using namespace cv;
+// using namespace std;
+// using namespace cv;
 
 
 Mat getMask(Mat img){
@@ -55,10 +55,10 @@ int main(int argc, char **argv){
     Mat img, imgResize, mask, imgROI;
     Rect coordinates;
 
-    path = "D:/DOMI/University/Thesis/Coding/Dataset/";
-    dataset = "Original_orsize/";
-    label = "AKIEC/";
-    filename = "ISIC_0066507.png";
+    path = "";
+    dataset = "";
+    label = "";
+    filename = "";
 
     img = imread(path + dataset + label + filename);
     // resize(img, imgResize, cv::Size(), 0.5, 0.5);
