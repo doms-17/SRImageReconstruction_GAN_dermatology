@@ -5,8 +5,8 @@ clc
 tic
 
 %% ========== Utils ==========%
-gt_root = "D:/DOMI/University/Thesis/Coding/Visualization/derma_v1/lowResolution_512_try/";
-sr_root = "D:/DOMI/University/Thesis/Coding/Visualization/derma_v1/visualization_reOrdered/";
+gt_root = "";  % path Ground Truth
+sr_root = "";  % path Super Resolution
 
 testSet = "Validation/";
 
@@ -138,7 +138,7 @@ timeElapsed = toc/60 %min
 %% ========== Save files ==========%
 
 %----- All metrics: -----%
-root_metrics = "D:/DOMI/University/Thesis/Results/excel_metrics/";
+root_metrics = "";  % path where to save metrics stats
 path_metrics = (root_metrics + testSet);
 mkdir(path_metrics);
 
