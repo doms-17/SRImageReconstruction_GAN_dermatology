@@ -8,8 +8,8 @@ def create_folder(dir_name: str) -> str:
 
 
 def test() -> None:
-    root_path: str = "D:\\DOMI\\University\\Thesis\\Coding\\Dataset\\TestSet_original\\Atlas\\images"
-    new_root_path: str = "D:\\DOMI\\University\\Thesis\\Coding\\Dataset\\TestSet_processed\\Atlas"
+    root_path: str = ""
+    new_root_path: str = ""
 
     sub_folders: list[str] = [f for f in os.listdir(root_path) if not f.startswith('.')]
 
