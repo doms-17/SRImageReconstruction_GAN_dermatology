@@ -5,15 +5,12 @@ clc
 tic
 
 %% ========== Utils ==========%
-gt_root = "D:/DOMI/University/Thesis/Coding/Dataset/TestSet_LR/";  % path of GT
-sr_root = "D:/DOMI/University/Thesis/Coding/Dataset/Inference_LR/"; % path of SR
+gt_root = "";  % path of Ground Truth (GT)
+sr_root = ""; % path of Super Resolution (SR)
 
-root_metrics = "D:/DOMI/University/Thesis/Results/iqa_metrics/inference_LR/";  % path metrics saving
+root_metrics = "";  % path metrics saving
 
-
-% testSets_name = ["Novara_good","Novara_trash","PH2","Nurugo"]; %"Atlas"
-% testSets_name = ["ISIC_not1024", "CC_ISIC_not1024", "Atlas"];
-testSets_name = ["Novara_good"];
+testSets_name = ["Nurugo","PH2","Atlas"]; % testSets name
 
 cont_notTestSet = 0;
 subfolders = dir(gt_root);
