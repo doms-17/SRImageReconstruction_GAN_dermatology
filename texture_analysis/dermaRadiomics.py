@@ -55,14 +55,14 @@ def texture_features(image, mask, extractor, all_channels: bool=True, channel: i
 
 def test():
     
-    params = "D:/DOMI/University/Thesis/Coding/Scripts/texture_analysis/dermaTextureAnalysis.yaml"
+    params = "texture_analysis/dermaTextureAnalysis.yaml"  # path where of yaml settings file
     extractor = radiomics.featureextractor.RadiomicsFeatureExtractor(params)      # Instantiate the extractor
 
-    path_image_gt = f"D:/DOMI/University/Thesis/Coding/Dataset/Texture_analysis/Novara/images_lr"
-    path_mask_gt = f"D:/DOMI/University/Thesis/Coding/Dataset/Texture_analysis/Novara/masks_gt"
+    path_image_gt = f"images_lr"
+    path_mask_gt = f"masks_gt"
 
-    path_image_sr = f"D:/DOMI/University/Thesis/Coding/Dataset/Texture_analysis/Novara/images_sr_from_lr"  
-    path_mask_sr = f"D:/DOMI/University/Thesis/Coding/Dataset/Texture_analysis/Novara/masks_sr"
+    path_image_sr = f"images_sr_from_lr"  
+    path_mask_sr = f"masks_sr"
 
     images_filenames_gt = os.listdir(path_image_gt)
     masks_filenames_gt = os.listdir(path_mask_gt)
@@ -123,9 +123,9 @@ def test():
     print(df_sr.head())
 
     ### Save features info as Excel file ###
-    excel_path_gt = f"D:/DOMI/University/Thesis/Results/texture_analysis/Novara_good_TA_lr.xlsx"
+    excel_path_gt = f"texture_analysis/gt.xlsx"  # path where to save gt results
     df_gt.to_excel(excel_path_gt)
-    excel_path_sr = f"D:/DOMI/University/Thesis/Results/texture_analysis/Novara_good_TA_sr_from_lr.xlsx"
+    excel_path_sr = f"sr_from_lr.xlsx"  # path where to save sr results
     df_sr.to_excel(excel_path_sr)
 
 
